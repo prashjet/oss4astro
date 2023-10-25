@@ -5,6 +5,10 @@ night. A spaceship landed in her garden. From the spaceship a little squishy tur
 shape of a shooting star emerged. 
 It introduced itself as Luna, (aka Shepard) from Proxima Centauri b.
 
+Lumo had a couple of special tasks for Stella. Stella eagerly agreed to help, 
+using her creativity and love for the stars. First to create a software 
+for astronomers and second, to observe Lumo's favourite planet Beltamesh 
+with her brand new telescope.
 
 Shepard had a special task: to create software for astronomers. Stella eagerly 
 agreed to help, using her creativity and love for the stars.
