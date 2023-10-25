@@ -1,10 +1,9 @@
 # Stella's Stellar Software Surprise
 
-
 Stella, a young girl who loved stargazing, had an extraterrestrial encounter one clear 
 night. A spaceship landed in her garden. From the spaceship a little squishy turquoise creature, in the 
 shape of a shooting star emerged. 
-It introduced itself as Shepard from Proxima Centauri b.
+It introduced itself as Luna, (aka Shepard) from Proxima Centauri b.
 
 
 Shepard had a special task: to create software for astronomers. Stella eagerly 
@@ -16,8 +15,7 @@ the software was the guessing game that users could play, where the software tri
 guess the user's favourite star by asking a bunch of random questions. Due to Lumo's 
 magic this worked everytime.
 
-
-Stella's love for the stars, combined with Shepard's magical technical abilities, proved that even a 
+Stella's love for the stars, combined with Luna's (aka Shepard's) magical technical abilities, proved that even a 
 young girl could make a big impact in astronomy. Stella's stellar software 
 changed the way people saw the universe, lighting up the night sky for 
 generations to come.
