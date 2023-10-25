@@ -1,7 +1,7 @@
 # Stella's Stellar Software Surprise
 
 Stella, a young girl who loved stargazing, had a magical encounter one clear 
-night. A shooting star named Lumo landed in her garden.
+night. A shooting star named Lumo landed in her garden on a pink magical unicorn.
 
 Lumo had a special task: to create software for astronomers. Stella eagerly 
 agreed to help, using her creativity and love for the stars.
