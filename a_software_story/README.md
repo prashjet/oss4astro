@@ -1,7 +1,8 @@
 # Stella's Stellar Software Surprise
 
-Stella, a young girl who loved stargazing, had a magical encounter one clear 
-night. A shooting star named Lumo landed in her garden.
+Stella, a young girl who loved stargazing, had an extraterrestrial encounter one clear 
+night. A spaceship landed in her garden. From the spaceship a little squishy turquoise creature emerged. 
+It introduced itself as Lumo from Proxima Centauri b.
 
 Lumo had a special task: to create software for astronomers. Stella eagerly 
 agreed to help, using her creativity and love for the stars.
