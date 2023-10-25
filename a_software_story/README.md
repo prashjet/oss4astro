@@ -23,3 +23,5 @@ Stella's love for the stars, combined with Luna's (aka Shepard's) magical techni
 young girl could make a big impact in astronomy. Stella's stellar software 
 changed the way people saw the universe, lighting up the night sky for 
 generations to come.
+
+And then a giraffe arrived, with lots of friends!
