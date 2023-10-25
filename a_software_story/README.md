@@ -1,7 +1,7 @@
 # Stella's Stellar Software Surprise
 
 Stella, a young girl who loved stargazing, had an extraterrestrial encounter one clear 
-night. A spaceship landed in her garden. From the spaceship a little squishy turquoise creature, in the 
+night. A spaceship landed in her garden with a pink magical unicorn. From the spaceship a little squishy turquoise creature, in the 
 shape of a shooting star emerged. 
 It introduced itself as Luna, (aka Shepard) from Proxima Centauri b.
 
