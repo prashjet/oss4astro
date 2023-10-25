@@ -13,3 +13,5 @@ Stella's love for the stars, combined with Lumo's magic, proved that even a
 young girl could make a big impact in astronomy. Stella's stellar software 
 changed the way people saw the universe, lighting up the night sky for 
 generations to come.
+
+Until darkness came forever.
