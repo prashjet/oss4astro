@@ -145,7 +145,7 @@ available (see examples [here](https://www.sphinx-doc.org/en/master/usage/themin
 
 After all the changes, your `conf.py` should look something like this:
 <p align="center">
-  <img width="800" height="884" src="./figs/conf_edits.png">
+  <img width="800" src="./figs/conf_edits.png">
 </p>
 
 6. Now we are ready to build the documentation pages! Do this from the `docs` directory.
@@ -173,7 +173,7 @@ your docstrings in order to turn them into a nicely-formatted web
 page. Here is a breakdown of what the different parts of this file mean:
 
 <p align="center">
-  <img width="800" height="110" src="./figs/correlate_f3.png">
+  <img width="800" height="156" src="./figs/correlate_f3.png">
 </p>
 
 8. Link the correlate page to the index page by adding ``correlate.rst``
