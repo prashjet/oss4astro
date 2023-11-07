@@ -299,7 +299,8 @@ pages for [orbitize](https://orbitize.readthedocs.io/en/latest/index.html),
 [RadVel](https://radvel.readthedocs.io/en/latest/), and
 [SPISEA](https://spisea.readthedocs.io/en/latest/). 
 
-The following 
+The next sections include some additional info on: 
+
 1. Hosting your Sphinx Documentation via ReadTheDocs
 2. Including Jupyter notebooks using MyST-NB
 3. Other Sphinx extensions
