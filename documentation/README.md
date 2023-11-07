@@ -14,6 +14,7 @@ repository structure currently looks like this:
 
 ```
 ├── correlator
+│   ├── README.md
 │   ├── correlator
 │   │   ├── __init__.py
 │   │   ├── correlate.py
@@ -24,22 +25,12 @@ There are two things to note:
 1. the actual source code (i.e. the file 
 `correlate.py`) is located in the directory `correlator/correlator/`, i.e. with 
 the repository name repeated twice. This is a common convention, and it keeps
-your source code separate from other files, e.g. by the end of this demo, the
-documentation will be located in a new directory `correlator/docs/`
+your source code separate from other types of files, e.g. the `README`, and
+the documentation (which we will now create).
 
-```
-├── correlator
-│   ├── correlator
-│   │   ├── __init__.py
-│   │   ├── correlator.py
-│   ├── docs
-│   │   ├── ...
-```
-
-The second thing to note is the file `__init__.py`. This file is empty, but we
-need it to turn our code into a Python package which we can import elsewhere.
-We need this for `sphinx` to work; we will learn more about `__init__.py` when
-we discuss code packaging.
+2. we need the file `__init__.py` alongside the source code. This file is empty, 
+but it is needed to turn our code into a Python package which we can import elsewhere.
+We will learn more about `__init__.py` when discussing packaging.
 
 ## Python Docstrings
 
@@ -51,17 +42,13 @@ docstrings (see examples
 [here](https://betterprogramming.pub/3-different-docstring-formats-for-python-d27be81e0d68)),
 but today we will focus on the Google docstring. 
 
-[https://github.com/prashjet/correlator]
-
-In the `oss4astro/documentation/` directory, open `correlate.py` in a
+In the example repository, open `correlate.py` in a
 text editor. These functions have Google-style docstrings. Let's look at
 the different components of the docstring for the `cross_corr` function:
-
 
 <p align="center">
   <img width="800" height="211" src="./figs/docstring_f.png">
 </p>
-
 
 This example shows a docstring for a typical function. Docstrings for
 specific cases (e.g., optional input variables, classes,
@@ -70,7 +57,7 @@ Example docstrings for these cases (and more!) can be found [here](https://sphin
 
 In addition to providing crucial information, docstrings provide a standardized way to
 document code that can be easily parsed by automated
-documetation tools, like
+documentation tools, like
 [sphinx](https://www.sphinx-doc.org/en/master/). Let's try using
 sphinx to build documentation for `correlate.py`!
 
@@ -89,77 +76,74 @@ documentation page; you can see other theme examples
 pip install sphinxcontrib-napoleon sphinx-rtd-theme
 ```
 
-1. In this example, we will create documentation for the function
-`correlate.py`, which is located under the `documentation/` directory in
-the `oss4astro` repository. Start by using `cd` to move into the
-`documentation` directory.
-
-2. Now we are ready to initialize the documentation. Start by making a
-`docs` directory in your repo. Then run `sphinx-quickstart` within `docs`:
+2. We will create documentation for the functions in `correlate.py`.
+Start by making a repository `correlator/docs/` i.e. so your directory looks like
+```
+├── correlator
+│   ├── README.md
+│   ├── correlator
+│   │   ├── __init__.py
+│   │   ├── correlate.py
+│   ├── docs
+```
+Move into this `docs` directory, then run `sphinx-quickstart` within `docs`:
 ```
 mkdir docs
 cd docs
 sphinx-quickstart
 ```
-Answer the questions when prompted on the terminal. Answer `n` to the question: `Separate source and build directories?`.
+Answer the questions when prompted on the terminal.
+
+Answer `y` to the question: `Separate source and build directories?`.
 
 This should create several files and directories in your `docs`
 directory, as shown below.
 ```
 $ ls
-Makefile   _build     _static    _templates conf.py    index.rst  make.bat
+Makefile	build		make.bat	source
+```
+The `source` directory contains the documentation source code. This is
+where you will edit and add files to build your documentation. Currently it 
+contains
+```
+$ ls
+_static		_templates	conf.py		index.rst
 ```
 
-3. Open `conf.py` in a text editor. This is the configuration
+The file `conf.py` is the configuration
 file for the Sphinx documentation builder, which controls how Sphinx
 processes your code.
 
-First, we'll need to tell Sphinx where to find your python files by
-defining the path. You can think of this as being
-similar to the PYTHONPATH environment variable that python uses to run the
-python files you create.
-
-If your `conf.py` file has a ``Path setup'' section, then uncomment
-the following lines:
-
-```
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-```
-
-Otherwise, copy and paste these lines to the top of `conf.py` and
-uncomment them.
-
-4. Change the argument of `os.path.abspath('.')` to point to the top level of
-the `documentation` directory (where `correlate.py` lives). In this
-example that would be 
-one level up in the directory structure from `conf.py`, which is
-denoted as `..`.
+3. We need to tell Sphinx where to find your python files by
+defining the path. To do this, copy and paste the following lines 
+somewhere into `conf.py`:
 ```
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('LOCATION_TO_SOURCE_CODE'))
 ```
-This command places the code directory you wish to
-document at the front of your existing path, to ensure that sphinx
-searches for the python files there first.
+(Note some versions of `sphinx` will add the above lines to `conf.py` 
+automatically, though you may have to uncomment them.)
+Now change the argument of `os.path.abspath()` to your source code directory. 
+To do this, you should use the relative path from `docs/source/`. For this 
+example, that means we need,
+```
+os.path.abspath('../../correlator/')
+```
+where `..` means "go one directory up". If I had used an absolute path instead
+of a relative path, i.e. on my laptop if I had used
+```
+os.path.abspath('/Users/prash/Astro/Teaching/23_ws_OSS/correlator/correlator')
+```
+then other people who download my software would not be able to make the documentation.  
 
-5. Make several additional changes to the conf.py file:
-* Add the line `root_doc = 'index'` below your author name. This
-  defines the main page of your documentation to be 'index.rst" (which
-  was automatically generated by `sphinx-quickstart` in step 4). The
-  root page contains the
-  table of contents for your package (more on that later)
-* Also add “sphinx.ext.autodoc” and "sphinx.ext.napoleon" to the `extensions`
-   list in `conf.py`. "spinx.ext.autodoc" gives sphinx the power to
-   read your python files and automatically extract the
-   docstrings. "sphinx.ext.napoleon" allows sphinx to understand
-   google-style docstrings.
-* Finally, change the `html_theme` variable to
-  "sphinx_rtd_theme". This defines the style of the documentation
-  webpages. Here, we use the ReadTheDocs format. But, many others are
-  available (see examples [here](https://www.sphinx-doc.org/en/master/usage/theming.html))
+4. Add the extensions `sphinx.ext.autodoc` and `sphinx.ext.napoleon` to the extensions list 
+in `conf.py`. The first one gives sphinx the power to read your python files and 
+automatically extract docstrings. The  second allows sphinx to understand google-style docstrings.
+
+5. Change the `html_theme` variable to `sphinx_rtd_theme`. This defines the style 
+of the documentation webpages. Here, we use the ReadTheDocs format. But, many others are
+available (see examples [here](https://www.sphinx-doc.org/en/master/usage/theming.html))
 
 
 <p align="center">
@@ -170,7 +154,6 @@ searches for the python files there first.
 ```
 make html
 ```
-
 This will create a basic set of documentation pages in `_build/html`. Open up the `index.html` with your favorite browser.
 
 
