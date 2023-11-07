@@ -175,9 +175,7 @@ page. Here is a breakdown of what the different parts of this file mean:
 </p>
 
 8. Link the correlate page to the index page by adding ``correlate.rst``
-to ``index.rst`` under the "toctree" command. This puts
-``correlate.rst`` in the table-of-contents that appears in the main
-page of your documentation. Remember to match indentation levels!
+to ``index.rst`` under the "toctree" command (this stands for table-of-contents tree). This puts ``correlate.rst`` in the table-of-contents that appears in the main page of your documentation. Remember to match indentation levels!
 
 <p align="center">
   <img width="800" height="356" src="./figs/index_f.png">
@@ -244,12 +242,13 @@ Functions page, which has the documentation for `correlate.py`.
     respectively. These are optional, and so you can remove them if
     you'd like.
 
-* In the example above, let's say we wanted to insert a link to the correlation 
-  function page somwhere (say, under the "Indicies and tables" sections of the index page).
-  Now that the `correlate.rst` file has been added under the toctree, we can refer to its label using `:ref:` command:
+* Internal links. In our example, let's say we wanted to insert a link to 
+  the correlation function page somewhere in our documentation file, e.g. under the "Indicies and tables" section of the `index.rst` file. 
+  Now that the `correlate.rst` file has been added under the `toctree`, we can refer to its label using `:ref:` command:
 ```
 Indices and tables
 ==================
+
 We can make a link to the correlation page by referring to its label
   like this :ref:`correlation`.
   
@@ -258,7 +257,12 @@ We can make a link to the correlation page by referring to its label
 * :ref:`search`
  ```
 
+* Other build options. We used the `make html` command to build webpages. You
+  can also use `make latexpdf` to build a PDF version, and `make clean` to
+  remove all existing builds.
+
 ## Activity: Building Sphinx Documentation For Your Repository
+
 1. Document at least one function in your package with a docstring. 
 2. Set up sphinx documentation for your project repo and build the doc
 page for your function(s). Make sure it builds correctly!
@@ -266,12 +270,14 @@ page for your function(s). Make sure it builds correctly!
       step 4 in the example above. 
 
 
-## Activity Wrap-Up: Moving Forward with Code Documentation
+## Next Steps with Code Documentation
+
 We've focused on the basics of how to document your code using
 docstrings and how to automatically compile those docstrings into
 webpages via Sphinx. This is crucial to help other users
-(and yourself!) use your code in the future. As you work
-on your python packages, keep in mind that it is
+(and yourself!) use your code in the future. 
+
+As you work on your python packages, keep in mind that it is
 useful to include other information in your documentation as
 well, such as:
 
@@ -292,12 +298,19 @@ pages for [orbitize](https://orbitize.readthedocs.io/en/latest/index.html),
 [RadVel](https://radvel.readthedocs.io/en/latest/), and
 [SPISEA](https://spisea.readthedocs.io/en/latest/). 
 
-## Bonus Afternoon Activity: Linking your Sphinx Documentation with ReadTheDocs
+The following 
+1. Hosting your Sphinx Documentation via ReadTheDocs
+2. Including Jupyter notebooks using MyST-NB
+3. Other Sphinx extensions
+
+### Hosting your Sphinx Documentation via ReadTheDocs
+
 In most cases, we want to host our sphinx documentation online so that
-other users can access it easily. If your code is in a GitHub repo, is
+other users can access it easily. If you have webspace available, then 
+copy the contents of `build/html` there. If your code is in a GitHub repo, is
 public, 
-and has sphinx documentation set up as above,
-then you can host your documentation via
+and has sphinx documentation set up as above, then there is another option.
+You can host your documentation via
 [ReadTheDocs](https://readthedocs.org/). One very nice aspect of
 ReadTheDocs is that you can have it automatically recompile
 the documentation each time a change is pushed to your code
@@ -324,5 +337,47 @@ menu, check the “Build pull requests for this project” checkbox,
 and click the Save button at the bottom of the page. (From "Trigger a
 Build from a pull request"). 
 
+### Including Jupyter notebooks using MyST-NB
 
+Jupyter notebooks are a great tool for tutorials, with code directly running 
+alongside them. The [MyST-NB](https://myst-nb.readthedocs.io/en/latest/) package
+allows you to integrate notebooks nicely into your sphinx documentation.
 
+Basic instructions to get started:
+
+1. Install `myst-nb` via `pip install myst-nb`
+2. Add the `myst_nb` to the list of extensions in `conf.py`
+3. In your `docs/source/` directory, create your notebook file.
+  This is a Markdown files (ending `.md`) which begins with a header:
+```
+---
+kernelspec:
+  name: python3
+  display_name: python3
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: '0.13'
+    jupytext_version: 1.13.8
+---
+```
+4. In your notebook file, add text according to standard markdown commands 
+  (e.g. using `#` for headers), and add code cells such as
+```
+````{code-cell}
+print("Hello world!")
+````
+```
+5. Make the documentation as usual, i.e. `make html`. The code cells are 
+  executed at this stage, and their output will be shown in the final docs.
+
+See the [MyST-NB documentation](https://myst-nb.readthedocs.io/en/latest/) for
+many more options for writing, exectuting and displaying notebooks.
+
+### Other Sphinx extensions
+
+There is a whole world of other Sphinx extensions that you might find useful.
+This [website](https://sphinx-extensions.readthedocs.io/en/latest/) lists some
+of them. If you ever encounter something that you cannot do in Sphinx, 
+search around if there is a helpful extension.
