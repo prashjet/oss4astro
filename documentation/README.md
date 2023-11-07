@@ -64,9 +64,11 @@ sphinx to build documentation for `correlate.py`!
 ## Sphinx quickstart guide
 
 1. Install the required packages. We will need sphinx
+
 ```
 pip install sphinx
 ```
+
 as well as additional packages `sphinxcontrib-napoleon` (to be able to use Google 
 style docstrings), and the ReadTheDocs theme (i.e. the visual appearance of the
 documentation page; you can see other theme examples 
@@ -92,12 +94,9 @@ mkdir docs
 cd docs
 sphinx-quickstart
 ```
-Answer the questions when prompted on the terminal.
-
-Answer `y` to the question: `Separate source and build directories?`.
-
-This should create several files and directories in your `docs`
-directory, as shown below.
+Answer the questions when prompted on the terminal. Answer `y` to the question: 
+`Separate source and build directories?`. This should create several files and 
+directories in your `docs` directory, as shown below.
 ```
 $ ls
 Makefile	build		make.bat	source
@@ -120,13 +119,13 @@ somewhere into `conf.py`:
 ```
 import os
 import sys
-sys.path.insert(0, os.path.abspath('LOCATION_TO_SOURCE_CODE'))
+sys.path.insert(0, os.path.abspath(LOCATION_TO_SOURCE_CODE))
 ```
 (Note some versions of `sphinx` will add the above lines to `conf.py` 
 automatically, though you may have to uncomment them.)
-Now change the argument of `os.path.abspath()` to your source code directory. 
-To do this, you should use the relative path from `docs/source/`. For this 
-example, that means we need,
+Now we change the argument of `os.path.abspath()` to the actual source code directory. 
+To do this, use the relative path from `docs/source/`. For this example, that 
+means we need to edit the final line to,
 ```
 os.path.abspath('../../correlator/')
 ```
