@@ -152,11 +152,9 @@ After all the changes, your `conf.py` should look something like this:
 ```
 make html
 ```
-This will create a basic set of documentation pages in `build/html`. Open up the `index.html` with your favorite browser.
+This will create a basic set of documentation pages in `build/html`. Open up the `build/html/index.html` with your favorite browser.
 
-7. This page doesn't have any of the documentation for `correlate.py` yet, so let's add that. The content of these pages are
-controlled by the `.rst` (reStructured text) files. In the `docs/source/`
-directory, create a new `.rst` file called `correlate.rst`. The contents of this file should look like this:
+7. This page doesn't have any of the documentation for `correlate.py` yet, so let's add that. The content of these pages are controlled by the `.rst` (reStructured text) files in `docs/source/`. Create a new `.rst` file there called `correlate.rst`. The contents of this file should look like this:
 ```
 .. _correlation:
 
@@ -188,7 +186,7 @@ page of your documentation. Remember to match indentation levels!
 9. Run `make html` again to update the docs.
 
 10. View your documentation by opening the file at
-`_build/html/index.html`. You should now see a link to the Correlation
+`build/html/index.html`. You should now see a link to the Correlation
 Functions page, which has the documentation for `correlate.py`.
 
 ## Tips and Tricks
@@ -246,10 +244,9 @@ Functions page, which has the documentation for `correlate.py`.
     respectively. These are optional, and so you can remove them if
     you'd like.
 
-* In the example above, let's say we wanted to insert a link to the
-  correlation function page somwhere (say, under the "Indicies and
-  tables" sections of the index page). Now that the `correlate.rst` file has been added
-  under the toctree, we can refer to its label using `:ref:` command:
+* In the example above, let's say we wanted to insert a link to the correlation 
+  function page somwhere (say, under the "Indicies and tables" sections of the index page).
+  Now that the `correlate.rst` file has been added under the toctree, we can refer to its label using `:ref:` command:
 ```
 Indices and tables
 ==================
@@ -259,7 +256,6 @@ We can make a link to the correlation page by referring to its label
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
  ```
 
 ## Activity: Building Sphinx Documentation For Your Repository
