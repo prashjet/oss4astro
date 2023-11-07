@@ -90,7 +90,6 @@ Start by making a repository `correlator/docs/` i.e. so your directory looks lik
 ```
 Move into this `docs` directory, then run `sphinx-quickstart` within `docs`:
 ```
-mkdir docs
 cd docs
 sphinx-quickstart
 ```
@@ -138,26 +137,25 @@ then other people who download my software would not be able to make the documen
 
 4. Add the extensions `sphinx.ext.autodoc` and `sphinx.ext.napoleon` to the extensions list 
 in `conf.py`. The first one gives sphinx the power to read your python files and 
-automatically extract docstrings. The  second allows sphinx to understand google-style docstrings.
+automatically extract docstrings. The second allows sphinx to understand google-style docstrings.
 
 5. Change the `html_theme` variable to `sphinx_rtd_theme`. This defines the style 
 of the documentation webpages. Here, we use the ReadTheDocs format. But, many others are
 available (see examples [here](https://www.sphinx-doc.org/en/master/usage/theming.html))
 
-
+After all the changes, your `conf.py` should look something like this:
 <p align="center">
-  <img width="800" height="884" src="./figs/conf_edits2.png">
+  <img width="800" height="884" src="./figs/conf_edits.png">
 </p>
 
 6. Now we are ready to build the documentation pages! Do this from the `docs` directory.
 ```
 make html
 ```
-This will create a basic set of documentation pages in `_build/html`. Open up the `index.html` with your favorite browser.
+This will create a basic set of documentation pages in `build/html`. Open up the `index.html` with your favorite browser.
 
-
-7. This page doesn't have any of the documentation for `correlate.py` yet, so lets add that. The content of these pages are
-controlled by the `.rst` (reStructured text) files. In the `docs`
+7. This page doesn't have any of the documentation for `correlate.py` yet, so let's add that. The content of these pages are
+controlled by the `.rst` (reStructured text) files. In the `docs/source/`
 directory, create a new `.rst` file called `correlate.rst`. The contents of this file should look like this:
 ```
 .. _correlation:
@@ -172,8 +170,7 @@ Function to perform correlations.
 ```
 This will tell Sphinx automatically parse `correlate.py` and read
 your docstrings in order to turn them into a nicely-formatted web
-page. Here is a breakdown of what the different parts of this
-   file mean:
+page. Here is a breakdown of what the different parts of this file mean:
 
 <p align="center">
   <img width="800" height="156" src="./figs/correlate_f3.png">
@@ -187,7 +184,6 @@ page of your documentation. Remember to match indentation levels!
 <p align="center">
   <img width="800" height="356" src="./figs/index_f.png">
 </p>
-
 
 9. Run `make html` again to update the docs.
 
