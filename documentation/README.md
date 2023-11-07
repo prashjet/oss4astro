@@ -1,6 +1,48 @@
 ![Astronomy Documentation](https://pbs.twimg.com/media/EUJmsaXUcAEfmTT?format=jpg&name=medium)
 
-# Python Docstrings
+# Documentation
+
+This guide will demo how to (1) write docstrings for Python functions, and (2)
+use the `sphinx` software to build HTML webpages to display this software in
+web browsers.
+
+## `correlator` example repository
+
+We will do this for an example repository called [correlator](https://github.com/prashjet/correlator). 
+You can clone this repository to follow along with the demonstration. The 
+repository structure currently looks like this:
+
+```
+├── correlator
+│   ├── correlator
+│   │   ├── __init__.py
+│   │   ├── correlate.py
+```
+
+There are two things to note:
+
+1. the actual source code (i.e. the file 
+`correlate.py`) is located in the directory `correlator/correlator/`, i.e. with 
+the repository name repeated twice. This is a common convention, and it keeps
+your source code separate from other files, e.g. by the end of this demo, the
+documentation will be located in a new directory `correlator/docs/`
+
+```
+├── correlator
+│   ├── correlator
+│   │   ├── __init__.py
+│   │   ├── correlator.py
+│   ├── docs
+│   │   ├── ...
+```
+
+The second thing to note is the file `__init__.py`. This file is empty, but we
+need it to turn our code into a Python package which we can import elsewhere.
+We need this for `sphinx` to work; we will learn more about `__init__.py` when
+we discuss code packaging.
+
+## Python Docstrings
+
 A docstring is a string that appears in the first line of a function
 or class that provides an overview of its purpose, a description of
 the input variables it expects, and an explanation of the outputs
@@ -8,6 +50,8 @@ produced. There are several common styles of python
 docstrings (see examples
 [here](https://betterprogramming.pub/3-different-docstring-formats-for-python-d27be81e0d68)),
 but today we will focus on the Google docstring. 
+
+[https://github.com/prashjet/correlator]
 
 In the `oss4astro/documentation/` directory, open `correlate.py` in a
 text editor. These functions have Google-style docstrings. Let's look at
@@ -30,7 +74,7 @@ documetation tools, like
 [sphinx](https://www.sphinx-doc.org/en/master/). Let's try using
 sphinx to build documentation for `correlate.py`!
 
-# Sphinx quickstart guide
+## Sphinx quickstart guide
 
 1. Install the required packages. We will need sphinx
 ```
@@ -169,7 +213,7 @@ page of your documentation. Remember to match indentation levels!
 `_build/html/index.html`. You should now see a link to the Correlation
 Functions page, which has the documentation for `correlate.py`.
 
-# Tips and Tricks
+## Tips and Tricks
 
 * Docstring / rst file formatting:
   * Remember to check out these
@@ -240,7 +284,7 @@ We can make a link to the correlation page by referring to its label
 
  ```
 
-# Activity: Building Sphinx Documentation For Your Repository
+## Activity: Building Sphinx Documentation For Your Repository
 1. Document at least one function in your package with a docstring. 
 2. Set up sphinx documentation for your project repo and build the doc
 page for your function(s). Make sure it builds correctly!
@@ -248,7 +292,7 @@ page for your function(s). Make sure it builds correctly!
       step 4 in the example above. 
 
 
-# Activity Wrap-Up: Moving Forward with Code Documentation
+## Activity Wrap-Up: Moving Forward with Code Documentation
 We've focused on the basics of how to document your code using
 docstrings and how to automatically compile those docstrings into
 webpages via Sphinx. This is crucial to help other users
