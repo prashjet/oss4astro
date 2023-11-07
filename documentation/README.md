@@ -8,7 +8,7 @@ web browsers.
 
 ## `correlator` example repository
 
-We will do this for an example repository called [correlator](https://github.com/prashjet/correlator). 
+We will use example repository called [correlator](https://github.com/prashjet/correlator). 
 You can clone this repository to follow along with the demonstration. The 
 repository structure currently looks like this:
 
@@ -242,7 +242,9 @@ Functions page, which has the documentation for `correlate.py`.
     respectively. These are optional, and so you can remove them if
     you'd like.
 
-* Internal links. In our example, let's say we wanted to insert a link to 
+* Internal links
+
+  * In our example, let's say we wanted to insert a link to 
   the correlation function page somewhere in our documentation file, e.g. under the "Indicies and tables" section of the `index.rst` file. 
   Now that the `correlate.rst` file has been added under the `toctree`, we can refer to its label using `:ref:` command:
 ```
@@ -257,7 +259,9 @@ We can make a link to the correlation page by referring to its label
 * :ref:`search`
  ```
 
-* Other build options. We used the `make html` command to build webpages. You
+* Other build options
+
+  * We used the `make html` command to build webpages. You
   can also use `make latexpdf` to build a PDF version, and `make clean` to
   remove all existing builds.
 
@@ -266,9 +270,6 @@ We can make a link to the correlation page by referring to its label
 1. Document at least one function in your package with a docstring. 
 2. Set up sphinx documentation for your project repo and build the doc
 page for your function(s). Make sure it builds correctly!
-    * Hint: to begin, make a `docs` directory in your repo, just like
-      step 4 in the example above. 
-
 
 ## Next Steps with Code Documentation
 
@@ -364,11 +365,11 @@ jupytext:
 ```
 4. In your notebook file, add text according to standard markdown commands 
   (e.g. using `#` for headers), and add code cells such as
-```
-````{code-cell}
-print("Hello world!")
 ````
+```{code-cell}
+print("Hello world!")
 ```
+````
 5. Make the documentation as usual, i.e. `make html`. The code cells are 
   executed at this stage, and their output will be shown in the final docs.
 
