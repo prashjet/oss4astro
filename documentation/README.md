@@ -7,9 +7,9 @@ the input variables it expects, and an explanation of the outputs
 produced. There are several common styles of python
 docstrings (see examples
 [here](https://betterprogramming.pub/3-different-docstring-formats-for-python-d27be81e0d68)),
-but today we will focus on the Google Docstring. 
+but today we will focus on the Google docstring. 
 
-In the `tutorial_doc` directory, open `correlate.py` in your favorite
+In the `oss4astro/documentation/` directory, open `correlate.py` in a
 text editor. These functions have Google-style docstrings. Let's look at
 the different components of the docstring for the `cross_corr` function:
 
@@ -32,10 +32,23 @@ sphinx to build documentation for `correlate.py`!
 
 # Sphinx quickstart guide
 
+1. Install the required packages. We will need sphinx
+```
+pip install sphinx
+```
+as well as additional packages `sphinxcontrib-napoleon` (to be able to use Google 
+style docstrings), and the ReadTheDocs theme (i.e. the visual appearance of the
+documentation page; you can see other theme examples 
+[here](https://www.sphinx-doc.org/en/master/usage/theming.html))
+
+```
+pip install sphinxcontrib-napoleon sphinx-rtd-theme
+```
+
 1. In this example, we will create documentation for the function
-`correlate.py`, which is located under the `Day3/tutorial_doc/` directory in
-the codeastro repository. Start by using `cd` to move into the
-`tutorial_doc` directory.
+`correlate.py`, which is located under the `documentation/` directory in
+the `oss4astro` repository. Start by using `cd` to move into the
+`documentation` directory.
 
 2. Now we are ready to initialize the documentation. Start by making a
 `docs` directory in your repo. Then run `sphinx-quickstart` within `docs`:
@@ -53,7 +66,7 @@ $ ls
 Makefile   _build     _static    _templates conf.py    index.rst  make.bat
 ```
 
-3. Open `conf.py` in VScode or another editor. This is the configuration
+3. Open `conf.py` in a text editor. This is the configuration
 file for the Sphinx documentation builder, which controls how Sphinx
 processes your code.
 
@@ -75,9 +88,9 @@ Otherwise, copy and paste these lines to the top of `conf.py` and
 uncomment them.
 
 4. Change the argument of `os.path.abspath('.')` to point to the top level of
-the `tutorial_doc` directory (where `correlate.py` lives). In this
+the `documentation` directory (where `correlate.py` lives). In this
 example that would be 
-one level up in the directory struture from `conf.py`, which is
+one level up in the directory structure from `conf.py`, which is
 denoted as `..`.
 ```
 import os
@@ -101,8 +114,8 @@ searches for the python files there first.
    google-style docstrings.
 * Finally, change the `html_theme` variable to
   "sphinx_rtd_theme". This defines the style of the documentation
-  webpages. Here, we use the ReadtheDocs format. But, many others are
-  availabe (see examples [here](https://www.sphinx-doc.org/en/master/usage/theming.html))
+  webpages. Here, we use the ReadTheDocs format. But, many others are
+  available (see examples [here](https://www.sphinx-doc.org/en/master/usage/theming.html))
 
 
 <p align="center">
