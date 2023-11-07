@@ -182,7 +182,7 @@ to ``index.rst`` under the "toctree" command. This puts
 page of your documentation. Remember to match indentation levels!
 
 <p align="center">
-  <img width="800" height="356" src="./figs/index_f.png">
+  <img width="800" src="./figs/index_f.png">
 </p>
 
 9. Run `make html` again to update the docs.
