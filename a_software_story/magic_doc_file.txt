@@ -1,3 +1,4 @@
 Lumo uses the algorithm 'stardust' to put Stella's ideas into code.
 
 Then Stella's code becomes magic and magic becomes reality!
+And something else happened too
