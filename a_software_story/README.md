@@ -1,4 +1,4 @@
-# Stella's Stellar Software Surprise
+# Stella's Stellar Software Surprise: The Return of Lumo!
 
 Hello. This is a story. A great one!
 
