@@ -23,3 +23,4 @@ generations to come.
 
 Until darkness came forever. But then a giraffe arrived, with lots of friends!
 And the lived happily ever after :)
+Actually, I don't like the happy ending...
