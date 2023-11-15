@@ -21,3 +21,4 @@ changed the way people saw the universe, lighting up the night sky for
 generations to come.
 
 Until darkness came forever. But then a giraffe arrived, with lots of friends!
+And the lived happily ever after :)
