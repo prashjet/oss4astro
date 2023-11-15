@@ -1,5 +1,6 @@
 # Stella's Stellar Software Surprise
 
+Hello. This is a story.
 
 Stella, a young girl who loved stargazing, had an extraterrestrial encounter one clear 
 night. A shooting star named Lumo landed in her garden on a pink magical unicorn.
