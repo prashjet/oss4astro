@@ -29,7 +29,7 @@ When using our package, we want to be able to import functions such as `fibonacc
 
 Now we're ready for some definitions:
 - **module**: a file containing Python statements and functions to be imported in other places (e.g. the `sequences.py` file is a module)
-- **package**: a way of structuring collections of modules so that they can be imported using *dotted module names* e.g. `pysequence.sequences` is the dotted module names for the `sequences.py` file
+- **package**: a way of structuring collections of modules so that they can be imported using *dotted module names* e.g. `pysequence.sequences` is the dotted module name for the `sequences.py` file
 - **subpackages/submodules** are nested directories/files within the top-level package. It is possible to define a hierarchy of subpackages within subpackages etc...
 
 The `__init__.py` file is needed to tell Python that the host directory is a package. Each sub-package needs its own `__init__.py` file. For the simplest case, we leave `__init__.py` as an empty file.
@@ -146,7 +146,9 @@ In [3]: psq.analysis.compare_sequences.get_intersection_of_sequences(50, 'prime'
 Out[3]: [2, 3, 5, 13]
 ```
 
-This provides a familiar way to interact with python packages.
+**Note**: two alternatives to the above recipe for editing your `__init__.py` files are:
+1. not including import statements for any modules/sub-packages that are only meant to be used internally i.e. those that should not be accessible to users (are not part of the API).
+2. importing all desired modules and sub-packages in the top-level `__init__.py`. If this seems appealing, question why you have structured your package into subpackages in the first place.
 
 ### `if __name__ == "__main__":`
 
@@ -176,7 +178,7 @@ ImportError: attempted relative import with no known parent package
 
 i.e. you cannot run module directly when it contains a relative import.
 
-There are a couple of (workarounds)[https://stackoverflow.com/questions/16981921/relative-imports-in-python-3] for this. Perhaps the most straightforward is to replace the relative import statement with an absolute import. But even in that case, in order to be able to run the `compare_sequences.py` file directly, you still have to make sure your `PYTHONPATH` varible is correctly set. To safely guarantee this from within the `compare_sequences.py` file itself, you would need to replace the relative import with something like the following
+There are a couple of [workarounds](https://stackoverflow.com/questions/16981921/relative-imports-in-python-3) for this. Perhaps the most straightforward is to replace the relative import statement with an absolute import. But even in that case, in order to be able to run the `compare_sequences.py` file directly, you still have to make sure your `PYTHONPATH` varible is correctly set. To safely guarantee this from within the `compare_sequences.py` file itself, you would need to replace the relative import with something like the following
 
 ```
 import sys
@@ -186,32 +188,95 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from pysequence.sequences import get_sequence
 ```
 
-But this is a bit of a pain! My recommendation would be to use code snippets such as these in the tests, rather than in the modules themselves. Which brings us nicely on to testing...
+But this is a bit of a pain! My recommendation would be to avoid using code snippets such as these in the modules themselves. 
+
+Snippets like this can live in the test suite instead. Which brings us nicely on to testing...
 
 ## Testing
 
-Why test?
-
-- edge-cases
+We all test our code to some extent, but excellent developers spend **most of their time writing tests**. Writing excellent tests requires creativity; excellent developers try to anticipate and test as many use cases of their software as possible. Testing also ensures that your code maintains the same behavior over time. One of our goals for you today is to get in the habit of writing extensive, thorough tests.
 
 ### Types of test
 
-- unit-tests
-- end-to-end tests
+#### Unit tests
+
+- a unit is the smallest testable part of any software.
+- unit tests evaluate the correctness of individual elements of your code.
+- what they *should* test:
+    - test that the output of a function is correct for every type of input
+    - test edge cases, e.g. if your code operates on integers, test the input 0, if it operates on lists, try the empty list
+    - test that expected error messages are raised when appropriate
+- what they *don't need to* test:
+    - inputs that are not allowed by your documentation
+
+#### End-to-end tests
+
+- evaluate a code’s ability to perform its intended function
+- overall performance and accuracy of code’s main functions
+- test the way that users will interact with the code works
+- often take longer to run, so not always amenable to continuous integration
 
 ### Python `assert`
 
+Tests will make use of the Python assert statemement. This is `assert` followed by a statement. If the statement is true, then the `assert` passes, e.g.
+
+```
+In [1]: assert 1==1
+```
+
+While 
+
+```
+In [2]: assert 1==2
+---------------------------------------------------------------------------
+AssertionError                            Traceback (most recent call last)
+Cell In [2], line 1
+----> 1 assert 1==2
+```
+
 ### Using `pytest`
 
-Let's write our first test. The code example inside 
+1. Install the `pytest` package
 
-In the file `compare_sequences.py` we see an intra-package references, i.e. the line
+```
+pip install pytest
+```
+
+2. Create a `test` directory in the main repository (i.e. on the same level as the `README`).
+
+3. Create test files in the test directory with names of the form `test_*.py`, which should contain test functions whose names start with `test_` (`pytest` will automatically look for these functions).
+
+For our first test, let's borrow the code-snippet from `compare_sequences.py` and move this to a new file `test/test_compare_sequences.py`. For the time being, inside this test file let's also add the package to our Python path. Once we have installed the package, this won't be necessary. Assuming our `__init__.py` files are edited as described above, the test file will look like this,
+
+```
+import sys
+sys.path.append('/Users/prash/Astro/Teaching/23_ws_OSS/my_example_repos/pysequence')
+
+from pysequence.analysis import compare_sequences
+
+def test_compare_fib_primes():
+    n = 50
+    fib_primes = compare_sequences.get_intersection_of_sequences(n, 'prime', 'fibonacci')
+    assert fib_primes == [2, 3, 5, 13]
+```
+
+The final line of the `test_compare_fib_primes` function is the assert statement that pytest will use to determine if the test passed or failed.
+
+4. From the main repository, run `pytest`
+
+```
+pytest
+```
+
+You should see the following output,
+
+<p align="center">
+  <img width="500" src="./imgs/pytest_output.png">
+</p>
 
 ### What have I actually gained by doing this...?
 
 It feels 
-
-https://stackoverflow.com/questions/3697432/how-to-find-list-intersection
 
 ### Next time
 
@@ -219,3 +284,12 @@ Continuous integration (CI): automatically run these tests at specified stages o
 
 ### Testing best practice
 
+- Test as many use cases of your code as possible.
+- Write both unit tests and end-to-end tests.
+- Write tests throughout the development process. Some developers even advocate for writing tests before you write code!
+- Coverage is the fraction of your source code that is touched by a test. It is important... up to a point. It’s more important to test your code in all the ways your users will apply it than to get 100% test coverage. 100% coverage does not mean bug-free.
+- A great way to get up to speed with a code you haven’t worked with before is to write tests.
+
+# Activity
+
+Write a few more unit tests for `pysequence`. Try to cover all possible use cases, including edge cases. Think creatively: how can you test that the functions are doing what you expect?
