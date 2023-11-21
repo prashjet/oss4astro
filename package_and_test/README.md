@@ -10,14 +10,14 @@ The repository structure should initally looks like this:
 ├── pysequence                          # the repository
 │   ├── README.md
 │   ├── pysequence                      # top-level package
-│   │   ├── __init__.py                 # to initialize the pysequence package
+│   │   ├── __init__.py                 # to initialize the package
 │   │   ├── sequences.py                # a module within the package
 │   │   ├── analysis                    # a subpackage
 │   │   │   ├── __init__.py             # to initialize the subpackage
 │   │   │   ├── compare_sequences.py    # a submodule i.e. a module within the subpackage 
 ```
 
-At the top of the tree is the repository, called `pysequence`. This will contain the source code for the Python package itself, which lives in the directory `pysequence/pysequence/` i.e. with the package name repeated twice. The repitition of the package name is a common convention, but you can choose a different name for the repository and the package directories if you prefer. Aside from the package source code, the repository also contains many other files e.g. a `README`, and a `test` directory (which we will create today).
+At the top of the tree is the repository, called `pysequence`. This will contain the source code for the Python package itself, which lives in the directory `pysequence/pysequence/` i.e. with the package name repeated twice. The repitition of the package name is a common convention, but you can choose a different name for the repository and the package directories if you prefer. Aside from the package source code, the repository also contains many other files e.g. the `README`. Soon we will also create a `test` directory here.
 
 The file `sequences.py` contains functions defining mathematical sequences, e.g.
 
@@ -32,7 +32,7 @@ Now we're ready for some definitions:
 - **package**: a way of structuring collections of modules so that they can be imported using *dotted module names* e.g. `pysequence.sequences` is the dotted module names for the `sequences.py` file
 - **subpackages/submodules** are nested directories/files within the top-level package. It is possible to define a hierarchy of subpackages within subpackages etc...
 
-The `__init__.py` is needed to tell Python that the directory it lives in is a package. Each sub-package needs its own `__init__.py` file. For the simplest case, let's leave `__init__.py` as an empty file.
+The `__init__.py` is needed to tell Python that the host directory is a package. Each sub-package needs its own `__init__.py` file. For the simplest case, we leave `__init__.py` as an empty file.
 
 ### Where can I import from?
 
@@ -95,55 +95,11 @@ In [11]: from pysequence.sequences.analysis import get_intersection_of_sequences
 
 These are all of our import in the basic setup. For more advanced options, we need to edit our `__init__.py`.
 
-### `if __name__ == "__main__":`
-
-If you run the file `sequences.py` from the command line, i.e
-
-```
-python sequences.py
-```
-
-then the code snippet at the bottom is executed. This snippet is inside the check `if __name__ == "__main__"` check. This statement is only `True` when you run the file directly, not when.
-
-This is why we need the `if __name__ == "__main__"` check; otherwise, the code snippet would run every time we imported the `sequences` module. 
-
-### Intra-package References
-
-In the submodule `compare_sequences.py` we can see an example of an intra-package reference, i.e. an import statement within the package.
-
-```
-from ..sequences import get_sequence
-```
-
-This is a *relative* import, where the double dots `..` mean to look in one package *up* from the current subpackage. A single dot could be used to import a different module within the *same* level of the package.
-
-If we try running the file to execute the example code snippet, as we did with `sequences.py`, we see the following error,
-
-```
-ImportError: attempted relative import with no known parent package
-```
-
-i.e. you cannot run the 
-
-There are a couple of (workarounds)[https://stackoverflow.com/questions/16981921/relative-imports-in-python-3] for this. Maybe the most straightforward is to replace the relative import statement with an absolute import, but then to be able to run the `compare_sequences.py` file as a script, you still have to 
-
-```
-import sys
-import os
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(SCRIPT_DIR))
-
-from pysequence.sequences import get_sequence
-```
-
-But this is a bit of a pain. My recommendation would be to use code snippets such as these in the tests, instead of in the modules themselves
-
 ### What can go inside `__init__.py`
 
-So far, all of our `__init__.py` files are empty. In addition to its special role in defining packages, this file is also a regular module, which is executed whenever the package is imported. In principle, it can contain any code that you want to run each time you import the package. There are lots of [opinions](https://www.reddit.com/r/Python/comments/1bbbwk/whats_your_opinion_on_what_to_include_in_init_py/) on whether or not you should take advantage of this in practice.
+So far, all of our `__init__.py` files are empty. In addition to its special role in defining packages, this file is also a regular module. It is executed every time the package is imported. In principle, it can contain any code that you want to run each time you import the package. In practice, there are lots of [opinions](https://www.reddit.com/r/Python/comments/1bbbwk/whats_your_opinion_on_what_to_include_in_init_py/) on whether or not you should take advantage of this features.
 
-I think the following is a safe, minimal and useful way to do so. Edit the `__init__.py` of the top-level package, to import all of the top-level modules and subpackages i.e. we add this line to the top,
+I think the following is a safe, minimal and useful way use `__init__.py`. Edit the `__init__.py` of the top-level package, to import all of the modules and top-level subpackages i.e. in our case, we add this line,
 
 ```
 from . import sequences, analysis
@@ -156,7 +112,54 @@ In [12]: import pysequence as psq
 In [13]: psq.sequences.fibonacci_numbers(5)
 ```
 
+or 
+
+```
+In [14]: from pysequence import sequences
+In [15]: sequences.fibonacci_numbers(5)
+```
+
 To me, this feels like the most familiar way to interact with python packages.
+
+### `if __name__ == "__main__":`
+
+If you run the file `sequences.py` from the command line, i.e
+
+```
+python sequences.py
+```
+
+then the code snippet at the bottom is executed and the output is printed. This snippet is inside the `if __name__ == "__main__"` check. This statement only evaluates to `True` when you run the file directly, not when the file is imported by another module. This is why we need the `if __name__ == "__main__"` check. Without it, the code snippet would run (and the output would be printed) every time we imported the `sequences` module.
+
+### Intra-package References
+
+In the submodule `compare_sequences.py` we can see an example of an intra-package reference, i.e. an import statement within the package. This line
+
+```
+from ..sequences import get_sequence
+```
+
+is a *relative* import, where the double dots `..` mean to look in one directory *up* from the current subpackage. A single dot could be used to import a different module within the *same* level of the package.
+
+If we try running the file to execute the example code snippet, as we did with `sequences.py`, we see the following error,
+
+```
+ImportError: attempted relative import with no known parent package
+```
+
+i.e. you cannot run module directly when it contains a relative import.
+
+There are a couple of (workarounds)[https://stackoverflow.com/questions/16981921/relative-imports-in-python-3] for this. Perhaps the most straightforward is to replace the relative import statement with an absolute import. But even in that case, in order to be able to run the `compare_sequences.py` file directly, you still have to make sure your `PYTHONPATH` varible is correctly set. To safely guarantee this from within the `compare_sequences.py` file itself, you would need to replace the relative import with something like the following
+
+```
+import sys
+import os
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+from pysequence.sequences import get_sequence
+```
+
+But this is a bit of a pain! My recommendation would be to use code snippets such as these in the tests, rather than in the modules themselves. Which brings us nicely on to...
 
 ## Testing
 
