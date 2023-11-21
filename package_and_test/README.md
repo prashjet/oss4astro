@@ -159,20 +159,20 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from pysequence.sequences import get_sequence
 ```
 
-But this is a bit of a pain! My recommendation would be to use code snippets such as these in the tests, rather than in the modules themselves. Which brings us nicely on to...
+But this is a bit of a pain! My recommendation would be to use code snippets such as these in the tests, rather than in the modules themselves. Which brings us nicely on to testing...
 
 ## Testing
 
 Why test?
 
+- edge-cases
+
 ### Types of test
 
 - unit-tests
 - end-to-end tests
-- edge-cases
 
 ### Python `assert`
-
 
 ### Using `pytest`
 
@@ -180,10 +180,11 @@ Let's write our first test. The code example inside
 
 In the file `compare_sequences.py` we see an intra-package references, i.e. the line
 
-### What have I gained by doing this...?
+### What have I actually gained by doing this...?
+
+It feels 
 
 https://stackoverflow.com/questions/3697432/how-to-find-list-intersection
-
 
 ### Next time
 
