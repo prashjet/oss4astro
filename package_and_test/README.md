@@ -95,7 +95,7 @@ In [11]: from pysequence.sequences.analysis import get_intersection_of_sequences
 
 These are all of our import in the basic setup. For more advanced options, we need to edit our `__init__.py`.
 
-### Simpler `import` statements by using `__init__.py`
+### Simpler `import` statements by editing `__init__.py`
 
 The above import statements are quite long, and not what we are accustomed to in lots of common Python packages. For example, if I want to use the `numpy` linear algebra function to calculate eigenvalues, I have access to it just by importing `numpy`, i.e.
 
