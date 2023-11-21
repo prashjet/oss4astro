@@ -95,31 +95,58 @@ In [11]: from pysequence.sequences.analysis import get_intersection_of_sequences
 
 These are all of our import in the basic setup. For more advanced options, we need to edit our `__init__.py`.
 
-### What can go inside `__init__.py`
+### Simpler `import` statements by using `__init__.py`
 
-So far, all of our `__init__.py` files are empty. In addition to its special role in defining packages, this file is also a regular module. It is executed every time the package is imported. In principle, it can contain any code that you want to run each time you import the package. In practice, there are lots of [opinions](https://www.reddit.com/r/Python/comments/1bbbwk/whats_your_opinion_on_what_to_include_in_init_py/) on whether or not you should take advantage of this features.
+The above import statements are quite long, and not what we are used to in lots of common Python packages. For example, if I want to use the `numpy` linear algebra function to calculate eigenvalues, I have access to it just by importing `numpy`, i.e.
 
-I think the following is a safe, minimal and useful way use `__init__.py`. Edit the `__init__.py` of the top-level package, to import all of the modules and top-level subpackages i.e. in our case, we add this line,
+```
+In [1]: import numpy as np
+In [2]: np.linalg.eigvals
+Out[2]: <function numpy.linalg.eigvals(a)>
+```
+
+Whereas, in our current setup of `pysequence`, by simply importing `pysequence` we do not have access to any of it's constituent modules. If we try to access a function as we did with numpy, we get an `AttributeError`,
+
+```
+In [3]: import pysequence as psq
+In [4]: psq.sequences.fibonacci_numbers
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+Cell In [4], line 1
+----> 1 psq.sequences.fibonacci_numbers
+
+AttributeError: module 'pysequence' has no attribute 'sequences'
+```
+
+We can fix this by adding import statements within `__init__.py` files.
+
+The `__init__.py` files are executed every time a package/sub-package is imported. In principle, they can contain any code you want to be executed each time you import the package. In practice, there are lots of [opinions](https://www.reddit.com/r/Python/comments/1bbbwk/whats_your_opinion_on_what_to_include_in_init_py/) on how much you should take advantage of this features. But we can add a few  and simple way to use `__init__.py` to get the familiar usage of n
+
+1. Edit the `__init__.py` of the top-level package, to import all of the modules and (top-level) subpackages that it contains i.e. in our case, we add this line to `pysequnce/__init__.py`,
 
 ```
 from . import sequences, analysis
 ```
 
-This allows you to have access to all of the package contents just by importing the top-level package, e.g. we can now do
+Then iterate through the `__init__.py` of each subpackage, again adding import statements of all of the constituent modules and subpackages i.e. we add this line to `pysequnce/analysis/__init__.py`,
 
 ```
-In [12]: import pysequence as psq
-In [13]: psq.sequences.fibonacci_numbers(5)
+from . import compare_sequences
 ```
 
-or 
+This recipe allows you to have access to all the package contents just by importing the top-level package, e.g. we can now access all the following methods
 
 ```
-In [14]: from pysequence import sequences
-In [15]: sequences.fibonacci_numbers(5)
+In [1]: import pysequence as psq
+
+In [2]: psq.sequences.fibonacci_numbers(5)
+Out[2]: [1, 1, 2, 3]
+
+In [3]: psq.analysis.compare_sequences.get_intersection_of_sequences(50, 'prime', 'fibonacci')
+Out[3]: [2, 3, 5, 13]
 ```
 
-To me, this feels like the most familiar way to interact with python packages.
+This provides a familiar way to interact with python packages.
 
 ### `if __name__ == "__main__":`
 
