@@ -25,22 +25,22 @@ The file `sequences.py` contains functions defining mathematical sequences, e.g.
   <img width="500" src="./imgs/fibonacci.png">
 </p>
 
-When using our package, we want to be able to import functions such as `fibonacci_numbers` to be able to use elsewhere.
+When using our package, we want to be able to import functions such as `fibonacci_numbers` for use elsewhere.
 
 Now we're ready for some definitions:
-- **module**: a file containing Python definitions and statements to be imported in other places (e.g. the `sequences.py` file is a module)
+- **module**: a file containing Python statements and functions to be imported in other places (e.g. the `sequences.py` file is a module)
 - **package**: a way of structuring collections of modules so that they can be imported using *dotted module names* e.g. `pysequence.sequences` is the dotted module names for the `sequences.py` file
 - **subpackages/submodules** are nested directories/files within the top-level package. It is possible to define a hierarchy of subpackages within subpackages etc...
 
-The `__init__.py` is needed to tell Python that the host directory is a package. Each sub-package needs its own `__init__.py` file. For the simplest case, we leave `__init__.py` as an empty file.
+The `__init__.py` file is needed to tell Python that the host directory is a package. Each sub-package needs its own `__init__.py` file. For the simplest case, we leave `__init__.py` as an empty file.
 
 ### Where can I import from?
 
 By default, you can only import a package when you are in the directory containing that package, e.g. only when you're in the main directory for the `pysequence` repository can you `import pysequence`.
 
-This isn't what we want! One of the main reasons for creating a software package is to keep the package separate from scripts and notebooks which use the package. Without this, it quickly becomes difficult to re-use your software in different contexts.
+This isn't what we want! One of the main reasons for creating a software package is to keep the package separate from scripts and notebooks which use the package. Without this, it quickly becomes difficult to re-use your software in different contexts. We want to be able to import out package from any location.
 
-There are two solutions to this. This first solution is to *install* your software package. We will eventually do this, but for the time being, we will use the temporary solution of adding the directory containing the package to your Python path. I will do this interactively inside an `ipython` session as follows,
+There are two ways to solve this. This first solution is to *install* your software package. We will eventually do this, but for the time being, we will use the temporary solution of adding the directory containing the package to your Python path. I will do this interactively inside an `ipython` session as follows,
 
 ```
 import sys
@@ -97,7 +97,7 @@ These are all of our import in the basic setup. For more advanced options, we ne
 
 ### Simpler `import` statements by using `__init__.py`
 
-The above import statements are quite long, and not what we are used to in lots of common Python packages. For example, if I want to use the `numpy` linear algebra function to calculate eigenvalues, I have access to it just by importing `numpy`, i.e.
+The above import statements are quite long, and not what we are accustomed to in lots of common Python packages. For example, if I want to use the `numpy` linear algebra function to calculate eigenvalues, I have access to it just by importing `numpy`, i.e.
 
 ```
 In [1]: import numpy as np
@@ -105,7 +105,7 @@ In [2]: np.linalg.eigvals
 Out[2]: <function numpy.linalg.eigvals(a)>
 ```
 
-Whereas, in our current setup of `pysequence`, by simply importing `pysequence` we do not have access to any of it's constituent modules. If we try to access a function as we did with numpy, we get an `AttributeError`,
+Contrast this to our current setup of `pysequence`, where by simply importing `pysequence` we do not have access to any of it's constituent modules. If we try to access a function as we did with numpy, we get an `AttributeError`,
 
 ```
 In [3]: import pysequence as psq
@@ -120,15 +120,15 @@ AttributeError: module 'pysequence' has no attribute 'sequences'
 
 We can fix this by adding import statements within `__init__.py` files.
 
-The `__init__.py` files are executed every time a package/sub-package is imported. In principle, they can contain any code you want to be executed each time you import the package. In practice, there are lots of [opinions](https://www.reddit.com/r/Python/comments/1bbbwk/whats_your_opinion_on_what_to_include_in_init_py/) on how much you should take advantage of this features. But we can add a few  and simple way to use `__init__.py` to get the familiar usage of n
+The `__init__.py` files are executed every time a package/sub-package is imported. In principle, they can contain any functions (or other code) you want to have available when you import the package. In practice, I recommend only adding import statements inside `__init__.py`.
 
-1. Edit the `__init__.py` of the top-level package, to import all of the modules and (top-level) subpackages that it contains i.e. in our case, we add this line to `pysequnce/__init__.py`,
+First, edit the `__init__.py` of the top-level package, to import all of the modules and (top-level) subpackages that it contains i.e. in our case, we add this line to `pysequnce/__init__.py`,
 
 ```
 from . import sequences, analysis
 ```
 
-Then iterate through the `__init__.py` of each subpackage, again adding import statements of all of the constituent modules and subpackages i.e. we add this line to `pysequnce/analysis/__init__.py`,
+Next, iterate down through the subpackages, again editing their `__init__.py` file to import all of the constituent modules and subpackages they contain i.e. we add this line to `pysequnce/analysis/__init__.py`,
 
 ```
 from . import compare_sequences
