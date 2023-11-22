@@ -1,6 +1,13 @@
 # Package Structure and Writing Tests
 
-Today I will demonstrate how to (1) structure your package (based on info from the [official Python documentation](https://docs.python.org/3/tutorial/modules.html#packages)), and (2) write and run tests using [`pytest`](https://docs.pytest.org/en/7.4.x/) framework. For both sections, we'll use an example repository called [pysequence](https://github.com/prashjet/pysequence). You can clone this repository to follow along with the demonstration. 
+Today I will demonstrate how to (1) structure your package (based on info from the [official Python documentation](https://docs.python.org/3/tutorial/modules.html#packages)), and (2) write and run tests using [`pytest`](https://docs.pytest.org/en/7.4.x/) framework. For both sections, we'll use an example repository called [pysequence](https://github.com/prashjet/pysequence). You can clone this repository to follow along with the demonstration.
+
+Key take aways:
+- know what Python modules and packages are,
+- what to include in an `__init__.py`,
+- know what your tests should check,
+- know the difference between unit tests and end-to-end tests,
+- how to write and exeucute tests using `pytest`,
 
 ## Package Structure
 
@@ -17,7 +24,7 @@ The repository structure should initally looks like this:
 │   │   │   ├── compare_sequences.py    # a submodule i.e. a module within the subpackage 
 ```
 
-At the top of the tree is the repository, called `pysequence`. This will contain the source code for the Python package itself, which lives in the directory `pysequence/pysequence/` i.e. with the package name repeated twice. The repitition of the package name is a common convention, but you can choose a different name for the repository and the package directories if you prefer. Aside from the package source code, the repository also contains many other files e.g. the `README`. Soon we will also create a `test` directory here.
+The main repository `pysequence` is at the top of the directory tree. This source code for the Python package itself lives in the directory `pysequence/pysequence/` i.e. with the package name repeated twice. The repitition of the package name is a common convention, but you can choose a different name for the repository and the package directories if you prefer. Aside from the package source code, the repository also contains many other files, e.g. the `README`, and soon we will also create a `test` directory here.
 
 The file `sequences.py` contains functions defining mathematical sequences, e.g.
 
@@ -25,18 +32,18 @@ The file `sequences.py` contains functions defining mathematical sequences, e.g.
   <img width="500" src="./imgs/fibonacci.png">
 </p>
 
-When using our package, we want to be able to import functions such as `fibonacci_numbers` for use elsewhere.
+When using our package, we want to be able to import functions such as `fibonacci_numbers` for use elsewhere. The package also contains an `analysis` subpackage, with 
 
 Now we're ready for some definitions:
-- **module**: a file containing Python statements and functions to be imported in other places (e.g. the `sequences.py` file is a module)
-- **package**: a way of structuring collections of modules so that they can be imported using *dotted module names* e.g. `pysequence.sequences` is the dotted module name for the `sequences.py` file
-- **subpackages/submodules** are nested directories/files within the top-level package. It is possible to define a hierarchy of subpackages within subpackages etc...
+- **module**: a *file* containing Python statements and functions to be imported in other places (e.g. the `sequences.py` file is a module)
+- **package**: a *directory* containing a collection of modules (e.g. `pysequence`). They are structured so that modules inside a package can be imported using *dotted module names* e.g. `pysequence.sequences` is the dotted module name for the `sequences.py` file
+- **subpackages/submodules** are directories/files nested within the top-level package. It is possible to define a hierarchy of subpackages within subpackages etc...
 
-The `__init__.py` file is needed to tell Python that the host directory is a package. Each sub-package needs its own `__init__.py` file. For the simplest case, we leave `__init__.py` as an empty file.
+The `__init__.py` file tells Python that the host directory is a package. Each sub-package needs its own `__init__.py` file. For the simplest case, we leave `__init__.py` as an empty file.
 
 ### Where can I import from?
 
-By default, you can only import a package when you are in the directory containing that package, e.g. only when you're in the main directory for the `pysequence` repository can you `import pysequence`.
+By default, you can only import a package when you are in the directory containing that package, e.g. only when you're in the main `pysequence` repository can you import the package via `import pysequence`.
 
 This isn't what we want! One of the main reasons for creating a software package is to keep the package separate from scripts and notebooks which use the package. Without this, it quickly becomes difficult to re-use your software in different contexts. We want to be able to import out package from any location.
 
@@ -97,7 +104,7 @@ These are all of our import in the basic setup. For more advanced options, we ne
 
 ### Simpler `import` statements by editing `__init__.py`
 
-The above import statements are quite long, and not what we are accustomed to in lots of common Python packages. For example, if I want to use the `numpy` linear algebra function to calculate eigenvalues, I have access to it just by importing `numpy`, i.e.
+The above import statements are quite long and cumbersome. They are somewhat different to how imports work for many common Python packages. For example, if I want to use the `numpy` linear algebra function to calculate eigenvalues, I can access it just by importing `numpy`, i.e.
 
 ```
 In [1]: import numpy as np
@@ -105,7 +112,9 @@ In [2]: np.linalg.eigvals
 Out[2]: <function numpy.linalg.eigvals(a)>
 ```
 
-Contrast this to our current setup of `pysequence`, where by simply importing `pysequence` we do not have access to any of it's constituent modules. If we try to access a function as we did with numpy, we get an `AttributeError`,
+Another way to say this is that after importing `numpy`, the function `np.linalg.eigvals` is available in my *namespace*.
+
+Contrast this to our current setup of `pysequence`. If we just import `pysequence` we do not have access to any of it's constituent modules. If we try to access a function as we did with numpy, we get an `AttributeError`,
 
 ```
 In [3]: import pysequence as psq
@@ -118,17 +127,19 @@ Cell In [4], line 1
 AttributeError: module 'pysequence' has no attribute 'sequences'
 ```
 
-We can fix this by adding import statements within `__init__.py` files.
+We can make `pyseququence` more closely resemble `numpy` by editing its `__init__.py` files.
 
-The `__init__.py` files are executed every time a package/sub-package is imported. In principle, they can contain any functions (or other code) you want to have available when you import the package. In practice, I recommend only adding import statements inside `__init__.py`.
+The `__init__.py` files are executed every time a package/sub-package is imported. In principle, they can contain any functions or other code you want to have available when you import the package. In practice, this can be confusing, so I recommend only adding import statements inside `__init__.py`.
 
-First, edit the `__init__.py` of the top-level package, to import all of the modules and (top-level) subpackages that it contains i.e. in our case, we add this line to `pysequnce/__init__.py`,
+#### Recommeded `__init__.py` strategy
+
+First, edit the `__init__.py` of the top-level package so that it imports all the top-level modules and subpackages i.e. in our case, we add this line `pysequnce/__init__.py`,
 
 ```
 from . import sequences, analysis
 ```
 
-Next, iterate down through the subpackages, again editing their `__init__.py` file to import all of the constituent modules and subpackages they contain i.e. we add this line to `pysequnce/analysis/__init__.py`,
+Next, iterate down through the subpackages, again editing their `__init__.py` file to import all of the constituent modules and subpackages i.e. we add this line to `pysequnce/analysis/__init__.py`,
 
 ```
 from . import compare_sequences
@@ -146,9 +157,24 @@ In [3]: psq.analysis.compare_sequences.get_intersection_of_sequences(50, 'prime'
 Out[3]: [2, 3, 5, 13]
 ```
 
-**Note**: two alternatives to the above recipe for editing your `__init__.py` files are:
-1. not including import statements for any modules/sub-packages that are only meant to be used internally i.e. those that should not be accessible to users (are not part of the API).
-2. importing all desired modules and sub-packages in the top-level `__init__.py`. If this seems appealing, question why you have structured your package into subpackages in the first place.
+#### Other `__init__.py` strategies
+
+Sometimes, you might want to edit your `__init__.py` files in a different way. Two possible reasons are:
+1. if you don't want all modules/subpackages to be available to the end user (i.e. you want to exclude them from the API), then you can exclude importing them in the `__init__.py` files.
+2. if you want all functions available just one dot away from the main package name, you can import all the desired modules and sub-packages directly in the top-level `__init__.py`. e.g if our top level `__init__.py` contained
+
+```
+import analysis.compare_sequences.get_intersection_of_sequences
+```
+
+then we have that function available one dot away, i.e. 
+
+```
+In [1]: import pysequence as psq
+In [2]: psq.get_intersection_of_sequences
+```
+
+One downside to this option is that all the subpackage structure becomes lost when you import the main package, i.e. we can no longer tell from the import statements that `get_intersection_of_sequences` function lives in the `analysis` subpackage. If this is the behaivour you want, however, maybe you don't need to organise your package into subpackages in the first place...?
 
 ### `if __name__ == "__main__":`
 
@@ -158,7 +184,7 @@ If you run the file `sequences.py` from the command line, i.e
 python sequences.py
 ```
 
-then the code snippet at the bottom is executed and the output is printed. This snippet is inside the `if __name__ == "__main__"` check. This statement only evaluates to `True` when you run the file directly, not when the file is imported by another module. This is why we need the `if __name__ == "__main__"` check. Without it, the code snippet would run (and the output would be printed) every time we imported the `sequences` module.
+then the code snippet at the bottom is executed and the output is printed. This snippet lives inside the `if __name__ == "__main__"` check. This check only evaluates to `True` when you run the file directly (e.g. via `python sequences.py`) and *not* when the file is  imported by another module. This is why we need the `if __name__ == "__main__"` check. Without it, the code snippet would run (and the output would be printed) every time we imported the `sequences` module.
 
 ### Intra-package References
 
@@ -188,20 +214,18 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from pysequence.sequences import get_sequence
 ```
 
-But this is a bit of a pain! My recommendation would be to avoid using code snippets such as these in the modules themselves. 
-
-Snippets like this can live in the test suite instead. Which brings us nicely on to testing...
+But this is a bit of a pain! My recommendation would be to avoid using code snippets such as these in the modules themselves. Snippets like this can live in the test suite instead. Which brings us nicely on to testing...
 
 ## Testing
 
-We all test our code to some extent, but excellent developers spend **most of their time writing tests**. Writing excellent tests requires creativity; excellent developers try to anticipate and test as many use cases of their software as possible. Testing also ensures that your code maintains the same behavior over time. One of our goals for you today is to get in the habit of writing extensive, thorough tests.
+We all test our code to some extent, but excellent developers spend *most of their time writing tests*. Writing excellent tests requires **creativity**; excellent developers try to anticipate and test as many use cases of their software as possible. Testing also ensures that your code maintains the same behavior over time. Get in the habit of writing extensive, thorough tests.
 
-### Types of test
+There are two main types of test:
 
 #### Unit tests
 
 - a unit is the smallest testable part of any software.
-- unit tests evaluate the correctness of individual elements of your code.
+- unit tests evaluate the correctness of individual elements of your code,
 - what they *should* test:
     - test that the output of a function is correct for every type of input
     - test edge cases, e.g. if your code operates on integers, test the input 0, if it operates on lists, try the empty list
@@ -211,20 +235,20 @@ We all test our code to some extent, but excellent developers spend **most of th
 
 #### End-to-end tests
 
-- evaluate a code’s ability to perform its intended function
-- overall performance and accuracy of code’s main functions
-- test the way that users will interact with the code works
-- often take longer to run, so not always amenable to continuous integration
+- evaluate a code’s ability to perform its intended function,
+- test overall performance and accuracy of code’s main functions,
+- test the way that users will interact with the code works,
+- these might take longer to run than unit tests, in which case you might not want to run them as often
 
 ### Python `assert`
 
 Tests will make use of the Python assert statemement. This is `assert` followed by a statement. If the statement is true, then the `assert` passes, e.g.
 
 ```
-In [1]: assert 1==1
+In [1]: assert 1==1 # this passes
 ```
 
-While 
+while a false statement raises an `AssertionError`, i.e.
 
 ```
 In [2]: assert 1==2
@@ -234,7 +258,11 @@ Cell In [2], line 1
 ----> 1 assert 1==2
 ```
 
+**Note**: these examples use the `==` operator to compare two objects and check they are the same. This isn't always the right operator to use e.g. when comparing two floating point numbers, then they may be `==` even though. In this case, the `numpy` function `np.isclose` would be better (or `np.allclose` for comparing arrays of floats).
+
 ### Using `pytest`
+
+**Note**: the import statements I use in this section assume that you have set up your `__init__.py` in my recommnded way.
 
 1. Install the `pytest` package
 
@@ -248,21 +276,13 @@ pip install pytest
 
 For our first test, let's borrow the code-snippet from `compare_sequences.py` and move this to a new file `test/test_compare_sequences.py`. For the time being, inside this test file let's also add the package to our Python path. Once we have installed the package, this won't be necessary. Assuming our `__init__.py` files are edited as described above, the test file will look like this,
 
-```
-import sys
-sys.path.append('/Users/prash/Astro/Teaching/23_ws_OSS/my_example_repos/pysequence')
+<p align="center">
+  <img width="500" src="./imgs/my_first_test.png">
+</p>
 
-from pysequence.analysis import compare_sequences
+The final line of every test function should be an assert statement. This is how `pytest` determines if the test passed or failed.
 
-def test_compare_fib_primes():
-    n = 50
-    fib_primes = compare_sequences.get_intersection_of_sequences(n, 'prime', 'fibonacci')
-    assert fib_primes == [2, 3, 5, 13]
-```
-
-The final line of the `test_compare_fib_primes` function is the assert statement that pytest will use to determine if the test passed or failed.
-
-4. From the main repository, run `pytest`
+4. Run the test. From the main repository, run `pytest`
 
 ```
 pytest
@@ -274,13 +294,21 @@ You should see the following output,
   <img width="500" src="./imgs/pytest_output.png">
 </p>
 
+You can add more test functions in this test file, and create more test files in your test directory. `pytest` finds and runs them all.
+
+**Note**: as always, this is just the very basic usage. See the [pytest documentation](https://docs.pytest.org/en/7.4.x/) for lots more options.
+
 ### What have I actually gained by doing this...?
 
-It feels 
+What have we achieved by writing the previous test? We wrote some code, evaluated it's output, then wrote a test to check that it returned the same output. Isn't this test always going to trivially pass!?
 
-### Next time
+There are two points related to this:
 
-Continuous integration (CI): automatically run these tests at specified stages of code development (e.g. each time you commit, or make a pull request, or make a versioned code release). Lots of popular CI tools are based on `pytest`. In the next lecture, I'll show you how to set this up!
+1. not every test will be a comparison against existing output from the code e.g. we might just every number returned by `even_numbers` is even.
+
+2. if we do check against some output from our own code, we should be sure that this output that we are checking against is correct. Ideally we would check against an external source. For our example, [Wikipedia](https://en.wikipedia.org/wiki/Fibonacci_prime) can confirm for us that the only Fibonnaci prime numbers below 50 are [2, 3, 5, 13].
+
+3. we may reimplement certain parts of our code - e.g. let's replace the `intersection` function. 
 
 ### Testing best practice
 
@@ -290,6 +318,13 @@ Continuous integration (CI): automatically run these tests at specified stages o
 - Coverage is the fraction of your source code that is touched by a test. It is important... up to a point. It’s more important to test your code in all the ways your users will apply it than to get 100% test coverage. 100% coverage does not mean bug-free.
 - A great way to get up to speed with a code you haven’t worked with before is to write tests.
 
+In an upcoming lecture, we will discuss continuous integration (CI). This allows tests to automatically run at specified points in code development (e.g. each time you commit, or make a pull request, or make a versioned code release). Lots of popular CI tools are based on `pytest`.
+
 # Activity
 
-Write a few more unit tests for `pysequence`. Try to cover all possible use cases, including edge cases. Think creatively: how can you test that the functions are doing what you expect?
+1. think of some ideas to test `pysequence`. Think of unit tests for each individual function, and think of edge cases. (5 minutes).
+
+2. Write and run a unit tests for `pysequence`:
+- clone the repository and set up your `__init__.py` in the recommended way,
+- make a test directory, with a test file, and a test function. Don't forget to add the package to your path (in the test file, or via your `bashrc` file),
+- install `pytest` and use it to execute the test
