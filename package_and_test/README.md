@@ -127,7 +127,7 @@ Cell In [4], line 1
 AttributeError: module 'pysequence' has no attribute 'sequences'
 ```
 
-We can make `pyseququence` more closely resemble `numpy` by editing its `__init__.py` files.
+We can make `pysequence` more closely resemble `numpy` by editing its `__init__.py` files.
 
 The `__init__.py` files are executed every time a package/sub-package is imported. In principle, they can contain any functions or other code you want to have available when you import the package. In practice, this can be confusing, so I recommend only adding import statements inside `__init__.py`.
 
@@ -160,11 +160,13 @@ Out[3]: [2, 3, 5, 13]
 #### Other `__init__.py` strategies
 
 Sometimes, you might want to edit your `__init__.py` files in a different way. Two possible reasons are:
-1. if you don't want all modules/subpackages to be available to the end user (i.e. you want to exclude them from the API), then you can exclude importing them in the `__init__.py` files.
+
+1. if you don't want all modules/subpackages to be available to the end user (i.e. you want to exclude them from the API), then just don't import them in the `__init__.py` files. This might be useful if some modules/subpackages are needed for internal calculations, but you don's intend/want users to to access them.
+
 2. if you want all functions available just one dot away from the main package name, you can import all the desired modules and sub-packages directly in the top-level `__init__.py`. e.g if our top level `__init__.py` contained
 
 ```
-import analysis.compare_sequences.get_intersection_of_sequences
+from .analysis.compare_sequences import get_intersection_of_sequences
 ```
 
 then we have that function available one dot away, i.e. 
@@ -174,7 +176,7 @@ In [1]: import pysequence as psq
 In [2]: psq.get_intersection_of_sequences
 ```
 
-One downside to this option is that all the subpackage structure becomes lost when you import the main package, i.e. we can no longer tell from the import statements that `get_intersection_of_sequences` function lives in the `analysis` subpackage. If this is the behaivour you want, however, maybe you don't need to organise your package into subpackages in the first place...?
+One downside to this last option is that all the subpackage structure becomes lost when you import the main package, i.e. we can no longer tell from the import statements that `get_intersection_of_sequences` function lives in the `analysis.`. If this is the behaviour you want, however, perhaps question why you needed to organise your package into subpackages in the first place...?
 
 ### `if __name__ == "__main__":`
 
@@ -186,15 +188,23 @@ python sequences.py
 
 then the code snippet at the bottom is executed and the output is printed. This snippet lives inside the `if __name__ == "__main__"` check. This check only evaluates to `True` when you run the file directly (e.g. via `python sequences.py`) and *not* when the file is  imported by another module. This is why we need the `if __name__ == "__main__"` check. Without it, the code snippet would run (and the output would be printed) every time we imported the `sequences` module.
 
-### Intra-package References
+### Intra-package Relative Imports
 
-In the submodule `compare_sequences.py` we can see an example of an intra-package reference, i.e. an import statement within the package. This line
+In the submodule `compare_sequences.py` we can see an example of an intra-package relative import:
 
 ```
 from ..sequences import get_sequence
 ```
 
-is a *relative* import, where the double dots `..` mean to look in one directory *up* from the current subpackage. A single dot could be used to import a different module within the *same* level of the package.
+In this line, the double dots `..` mean to look in one directory up relative to the current subpackage. Three dots mean to look two directories up (etc), while a single dot is used to import a different module or subpackage within the *same* level of the package, e.g. if we wanted to import the `compare_sequences` module inside `sequences.py`, we could do the following,
+
+```
+from .analysis import compare_sequences
+```
+
+**Note**: Beware of circular imports i.e. if two modules are both trying to import from one another. This creates an infinite loop, and will raise an error. AFAIK, this is a fundamental limitation. If you find yourself needing a circular import, you might need to restructure your code.
+
+### Relative imports in main scripts
 
 If we try running the file to execute the example code snippet, as we did with `sequences.py`, we see the following error,
 
@@ -202,19 +212,17 @@ If we try running the file to execute the example code snippet, as we did with `
 ImportError: attempted relative import with no known parent package
 ```
 
-i.e. you cannot run module directly when it contains a relative import.
+i.e. you cannot run module directly (i.e. as a main file) when it contains a relative import.
 
-There are a couple of [workarounds](https://stackoverflow.com/questions/16981921/relative-imports-in-python-3) for this. Perhaps the most straightforward is to replace the relative import statement with an absolute import. But even in that case, in order to be able to run the `compare_sequences.py` file directly, you still have to make sure your `PYTHONPATH` varible is correctly set. To safely guarantee this from within the `compare_sequences.py` file itself, you would need to replace the relative import with something like the following
+There are a couple of [workarounds](https://stackoverflow.com/questions/16981921/relative-imports-in-python-3) for this. Perhaps the most straightforward is to replace the relative import statement with an absolute import. But even in that case, in order to be able to run the `compare_sequences.py` file directly, you still have to make sure your `PYTHONPATH` varible is correctly set. To safely guarantee this from within the `compare_sequences.py` file itself, you would need something like,
 
 ```
 import sys
-import os
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(SCRIPT_DIR))
+sys.path.append(' ')
 from pysequence.sequences import get_sequence
 ```
 
-But this is a bit of a pain! My recommendation would be to avoid using code snippets such as these in the modules themselves. Snippets like this can live in the test suite instead. Which brings us nicely on to testing...
+Setting the path like this from within the module itself can make the package very difficult to maintain. I advise not to do it. Avoid using code snippets such as these in the modules themselve.Instead they can live in example scripts, or even in your test suite. Which brings us nicely on to testing...
 
 ## Testing
 
@@ -258,11 +266,11 @@ Cell In [2], line 1
 ----> 1 assert 1==2
 ```
 
-**Note**: these examples use the `==` operator to compare two objects and check they are the same. This isn't always the right operator to use e.g. when comparing two floating point numbers, then they may be `==` even though. In this case, the `numpy` function `np.isclose` would be better (or `np.allclose` for comparing arrays of floats).
+**Note**: these examples use the `==` operator to compare two objects and check they are the same. This isn't always the right operator to use e.g. when checking if two floating point numbers are the same up to machine precision, then the `numpy` function `np.isclose` is a better choice. Similarly `np.allclose` is best for comparing two arrays of floats.
 
 ### Using `pytest`
 
-**Note**: the import statements I use in this section assume that you have set up your `__init__.py` in my recommnded way.
+**Note**: the import statements I use in this section assume that you have set up your `__init__.py` in the recommended way.
 
 1. Install the `pytest` package
 
@@ -274,7 +282,7 @@ pip install pytest
 
 3. Create test files in the test directory with names of the form `test_*.py`, which should contain test functions whose names start with `test_` (`pytest` will automatically look for these functions).
 
-For our first test, let's borrow the code-snippet from `compare_sequences.py` and move this to a new file `test/test_compare_sequences.py`. For the time being, inside this test file let's also add the package to our Python path. Once we have installed the package, this won't be necessary. Assuming our `__init__.py` files are edited as described above, the test file will look like this,
+For our first test, let's borrow the code-snippet from `compare_sequences.py` and move this to a new file `test/test_compare_sequences.py`. For the time being, inside this test file let's also add the package to our Python path (once we have installed the package, this won't be necessary). Assuming our `__init__.py` files are edited as described above, the test file will look like this,
 
 <p align="center">
   <img width="500" src="./imgs/my_first_test.png">
@@ -294,21 +302,21 @@ You should see the following output,
   <img width="500" src="./imgs/pytest_output.png">
 </p>
 
-You can add more test functions in this test file, and create more test files in your test directory. `pytest` finds and runs them all.
+You can add more test functions in this test file, and create more test files in your test directory: `pytest` automatically finds and runs them all.
 
 **Note**: as always, this is just the very basic usage. See the [pytest documentation](https://docs.pytest.org/en/7.4.x/) for lots more options.
 
 ### What have I actually gained by doing this...?
 
-What have we achieved by writing the previous test? We wrote some code, evaluated it's output, then wrote a test to check that it returned the same output. Isn't this test always going to trivially pass!?
+What have we achieved by writing the previous test? We wrote some code, evaluated its output, then wrote a test to check that it returned the same output. Isn't this test always going to trivially pass!?
 
-There are two points related to this:
+There are three points related to this:
 
-1. not every test will be a comparison against existing output from the code e.g. we might just every number returned by `even_numbers` is even.
+1. ideally not every test should be a comparison against existing output from the code e.g. we might just every number returned by `even_numbers` is even.
 
-2. if we do check against some output from our own code, we should be sure that this output that we are checking against is correct. Ideally we would check against an external source. For our example, [Wikipedia](https://en.wikipedia.org/wiki/Fibonacci_prime) can confirm for us that the only Fibonnaci prime numbers below 50 are [2, 3, 5, 13].
+2. if we do check against output from our own code, we should try to be extra sure that this output is correct. Ideally we would check against an external source. For our example, [Wikipedia](https://en.wikipedia.org/wiki/Fibonacci_prime) can confirm for us that the only Fibonnaci prime numbers below 50 are [2, 3, 5, 13].
 
-3. we may reimplement certain parts of our code - e.g. let's replace the `intersection` function. 
+3. we might reimplement certain parts of our code - e.g. let's replace the `intersection` function now. In this context, checking against prior code output does at least guarantee that reimplementation has not changed behaivour unexpectedly.
 
 ### Testing best practice
 
