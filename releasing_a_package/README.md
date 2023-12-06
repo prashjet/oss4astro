@@ -120,12 +120,7 @@ Steps to upload package to TestPyPI:
   - username: `__token__`
   - password: use the API token generated earlier
 
-The package is now uploaded to TestPyPI. The output tells us where our package can be found:
-
-```
-View at:
-https://test.pypi.org/project/pysequence/0.0.1/
-```
+The package is now uploaded to TestPyPI. The output tells us where the package can be found.
 
 We can now install it (e.g. in another environment), via
 
