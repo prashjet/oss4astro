@@ -134,12 +134,8 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps pyseq
 When uploading to the real [PyPI](https://pypi.org) rather than [TestPyPI](https://test.pypi.org/), there are a few differences:
 - use `twine upload dist/*` to upload your package and enter your credentials for the account you registered on the real PyPI. Now that you’re uploading the package in production, you don’t need to specify `--repository`
 - install your package from the real PyPI using `python3 -m pip install pysequence`
-  - i.e. just using the package name, note the full URL
+  - i.e. just using the package name, not the full URL
   - the `--no-deps` flag we used earlier was needed because TestPyPI doesn’t have the same packages as those that live on PyPI. This isn't needed when using the real PyPI.
-
-## GitHub releases
-
-...
 
 ## Version Numbers
 
@@ -152,16 +148,23 @@ The most common versioning convention is called [Semantic Versioning](https://se
 
 ### Where to specify the version number
 
-So far, we have specified the package version number in the `pyproject.toml` file. It is also standard and helpful to have the version specifier somewhere in the code itself, i.e. so that you can check which version you are using in a script:
+The version number is used in lots of places: (i) in the `pyproject.toml` file, (ii) in the `docs/conf.py` file when we made documentation, and (iii) as a string in the code itself, typically in the top level `__init__.py` file, e.g. adding the line
+
+```
+__version__ = '1.0.0'
+```
+
+
+This last option is helpful, e.g. so that you can check which version you are using in a script:
 
 ```
 import pysequence
 pysequence.__version__
 ```
 
-This `__version__` attribute would have to live somewhere within the import package. That gives two places where we need to specify the version number. Doing this manually, it is very easy to forget to update one of these when you make a release. There are [several ways](https://packaging.python.org/en/latest/guides/single-sourcing-package-version/) to solve this problem. I recommend the following:
+Altogether, that's three places where we need to specify the version number. Doing this manually, it is very easy to forget to update one when you make a release. There are [several ways](https://packaging.python.org/en/latest/guides/single-sourcing-package-version/) to solve this problem. I recommend the following:
 
-- in the top-level `__init__.py`, define a version string `__version__ = X.Y.Z`
+- manually define a version string `__version__ = X.Y.Z` in the top-level `__init__.py`, 
 - in `pyproject.toml` change the line `version = "0.0.1"` to `dynamic = ["version"]`
 - add a new section to the `pyproject.toml` file:
 
@@ -170,17 +173,54 @@ This `__version__` attribute would have to live somewhere within the import pack
 version = {attr = "pysequence.__version__"}
 ```
 
-When you re-install, the version is updated (thanks to `pyproject.toml`), and you have the `__version__`. Use this version attribute elsewhere in your package.
-
-Use it in the documentation! In the `docs/conf.py` file of your Sphinx documentation, use this variable to mark the release:
+- when you re-install the package, `pip` and `setuptools` read the version number automatically
+- you can now use this variable elsewhere, e.g. the `docs/conf.py` file of your Sphinx documentation,
 
 ``` 
 from pysequence import __version__
 release = __version__
 ```
 
-### Best practices
+## Change log
 
-- Keep GitHub & PyPI releases consistent.
-- Maintain a descriptive changelog of what has changed between versions
-  - if your have descriptive git commit messages, this will be easy!
+A changelog: a log or record of all notable changes made to a project. This can be in your documentation and/or in a standalone file (e.g. `CHANGELOG.md`) in the top-level of the repository. You can read useful tips for writing good changelogs [here](https://keepachangelog.com/en/1.1.0/).
+
+## GitHub releases
+
+Some people may download your code from GitHub, rather than `pip` install it. You can create a frozen, tagged distribution package on GitHub in the Releases section:
+
+<p align="center">
+  <img width="500" src="./imgs/github_release.png">
+</p>
+
+Full details are [here](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository). Summarised:
+- set the `tag` to the version number
+- set the Release title also to the version number
+- add a description
+  - automatically generated from commit messages
+  - or manually add some text
+  - this can be the same as a Changelog
+
+Always try to keep the GitHub & PyPI releases consistent!
+
+## Wrap-up
+
+A checklist for making a release:
+
+1. finalise your changes
+  - update your code and docs
+  - update the changelog:
+    - consider updating this as you go along, e.g. every time you merge a pull-request into `main`
+  - run the tests:
+    - this should tell you if there are any backward incompatible changes, i.e. if you need to increment the major number
+    - in January, we'll see how to do this automatically with GitHub actions
+2. update the version string in `__init__.py` appropriately,
+3. make the documentation
+  - upload new `html` files to hosting platform
+  - in January, we'll see how to do this automatically with `readthedocs`
+4. to upload to `PyPI`:
+  - create the distribution package using `build`,
+  - upload the distribution package to `PyPI` using `twine`
+5. GitHub release
+  - merge all outstanding changes to `main` branch via a pull-request
+  - create a versioned GitHub release
