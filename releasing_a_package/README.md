@@ -17,7 +17,7 @@ We'll use an example repository called [pysequence](https://github.com/prashjet/
 
 The term "package" is used in two ways in Python:
 
-- [import packages:](https://packaging.python.org/en/latest/glossary/#term-Import-Package): 
+- [import packages](https://packaging.python.org/en/latest/glossary/#term-Import-Package): 
   - a directory containing modules and `__init__.py` files that you can import
   - this is what we discussed [last time](https://github.com/prashjet/oss4astro/tree/main/package_and_test).
 - [distribution packages](https://packaging.python.org/en/latest/glossary/#term-Distribution-Package): 
@@ -55,8 +55,10 @@ The `pyproject.toml` file contains project information, and settings required by
 </p>
 
 This has three sections:
-- `[build-system]` tells build frontend tools (like `pip` and `build`) which backend to use for your project. We will use the `setuptools` backend.
-- `[project]` includes project information:
+- `[build-system]`
+  - tells build frontend tools (like `pip` and `build`) which backend to use for your project. We will use the `setuptools` backend.
+  - other backend options are Hatch, Flit, PDM. Find brief descriptions of what they offer [here](https://packaging.python.org/en/latest/key_projects/#hatch).
+- `[project]`, 
   - `name`: this must match the name of the top-level import package (i.e. the one containing the modules and top `__init__.py`)
     - if you follow along this tutorial, change the name of top-level import package to `pysequence_YOUR_NAME_HERE`
     - do this both the directory name, and in `name` entry of `pyproject.toml`
@@ -67,7 +69,7 @@ This has three sections:
   - `dependencies`: a list of dependencies, with version numbers specified with `==`, `>=`
 - `[project.urls]`: a hamepage (e.g. the GitHub repository URL), and possibly you can add others here e.g. for the documentation, GitHib Issue tracker etc.
 
-[Here](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#writing-pyproject-toml) is a full list of what can go in your `pyproject.toml` file. One relevant further section is [optional dependencies](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#dependencies-optional-dependencies): e.g. you could have a set of optional dependencies related to building the package (e.g. `pytest` for tests, `sphinx` for docs). You can create a list of these  under a `build` label, then a user can install these via `pip install your-project-name[build]`.
+[Here](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#writing-pyproject-toml) is a full list of what can go in your `pyproject.toml` file. One relevant further section is [optional dependencies](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#dependencies-optional-dependencies): e.g. you could have a set of optional dependencies related to building the package (e.g. `pytest` for tests, `sphinx` for docs). You can create a list of these under a label `build`, then a user can install these via `pip install your-project-name[build]`.
 
 ### Installing locally 
 
