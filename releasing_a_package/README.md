@@ -5,9 +5,9 @@ Key take-aways from today:
 1. know two meanings of the term "package" in Python
 2. how to make your package installable i.e. make it into a distribution package:
   - so you can locally install via `python -m pip install .`
-  - to publish your package to the Python Package Index (PyPI) so that others can install via `pip install my_cool_package`
-3. making a release on Github
-4. version numbers: what they mean, and where to specify them
+  - to publish to the Python Package Index (PyPI) so others can install via `pip install my_package`
+3. know what version numbers mean, and know when to update them
+4. know how to make a release on Github
 
 The official Python [packaging documentation](https://packaging.python.org/en/latest/overview/) is very good. Specifically for this demonstration, we'll more-or-less follow the [packaging projects tutorial](https://packaging.python.org/en/latest/tutorials/packaging-projects/) - look there for more details.
 
