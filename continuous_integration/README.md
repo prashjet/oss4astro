@@ -39,7 +39,7 @@ The directory `.github/workflows` contains workflows. This should live in the to
 
 Each file in `.github/workflows` corresponds to a separate workflow. The files are in [YAML](https://yaml.org/) format.
 
-Let's look into `workflow_01.yml`. Currently, this is the only workflow which is active.
+Let's look into `workflow_01.yml`. Currently this is the only workflow which is active.
 
 ### Event
 
@@ -67,12 +67,11 @@ Other types of events which can trigger a workflow include:
 
 > Your *workflow* contains one or more *jobs* which can run in sequential order or in parallel.
 
-The `workflow_01.yml` file specified one job which is called `build``
+The `workflow_01.yml` file specifies one job which is called `build``
 
 ```
 jobs:
   build:
-
     ...
 ```
 
@@ -160,7 +159,7 @@ which specifies a matrix (i.e. a grid) of different operating systems and python
 
 The matrix elements are used in the appropriate places in the rest of the job, i.e. `runs-on: ${{ matrix.os }}`, and `python-version: ${{ matrix.python-version }}`.
 
-## Demonstrate the workflow
+### Demonstrate the workflow
 
 Let's demonstrate this workflow by submitting a pull request to the main branch. This will run six tests at once!
 
@@ -169,7 +168,7 @@ Let's demonstrate this workflow by submitting a pull request to the main branch.
 Coverage is the percentage of code, counted by lines, which is touched by your tests. It's good to aim for high coverage, and to display this achievement proudly in your GitHub repository, using a *badge* such as,
 
 <p align="center">
-  <img width="100" src="./imgs/badge.png">
+  <img width="100" src="./img/badge.png">
 </p>
 
 A green coverage badge is quality assurance for anyone looking at your repository. Having said that... be aware that 100% coverage does *not* mean that code is 100% safe, since there may be contexts which are not covered by tests.
