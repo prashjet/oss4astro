@@ -1,12 +1,12 @@
 # Automatically Building and Testing your project in GitHub
 
-Today we will use *GitHub Actions* to automatically build our Python projects, run the test suites, and display the outputs. We'll answer three main questions:
+Today we will use *GitHub Actions* to automatically build our Python project, run the test suite, and display the output. By the end of today you should know:
 
 1. What are GitHub Actions?
 2. How to setup a GitHub Action for a Python project.
 3. How to add a coverage badge to your project.
 
-Automatically building and testing your project can streamline code development for you and others who contribute to your software. These topics fall under the wider umbrellas of *Continuous Integration* and *Continuous Delivery* (CI/CD).
+Automatically building and testing your project can streamline code development for yourself and other contributors. These topics fall under the wider umbrellas of *Continuous Integration* and *Continuous Delivery* (CI/CD).
 
 ## Example repo
 
@@ -29,9 +29,7 @@ pytest .
 
 The definition from the GitHub documentation page on [understanding GitHub Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions):
 
-```
-You can configure a GitHub Actions *workflow* to be triggered when an *event* occurs in your repository, such as a pull request being opened or an issue being created. Your *workflow* contains one or more *jobs* which can run in sequential order or in parallel. Each job will run inside its own virtual machine runner, or inside a container, and has one or more *steps* that either run a script that you define or run an action, which is a reusable extension that can simplify your workflow.
-```
+>You can configure a GitHub Actions *workflow* to be triggered when an *event* occurs in your repository, such as a pull request being opened or an issue being created. Your *workflow* contains one or more *jobs* which can run in sequential order or in parallel. Each job will run inside its own virtual machine runner, or inside a container, and has one or more *steps* that either run a script that you define or run an action, which is a reusable extension that can simplify your workflow.
 
 To understand these terms, let's walk through the example in `.github/workflows/workflow_01.yml`
 
@@ -45,9 +43,7 @@ Let's look into `workflow_01.yml`. Currently, this is the only workflow which is
 
 ### Event
 
-```
-You can configure a GitHub Actions *workflow* to be triggered when an *event* occurs in your repository...
-```
+>You can configure a GitHub Actions *workflow* to be triggered when an *event* occurs in your repository...
 
 The event is specified in the `on` section of the file. This workflow is triggered by event "a push to the main branch" via the following lines:
 
@@ -67,9 +63,7 @@ Other events which can trigger a workflow include:
 
 ### Jobs
 
-```
-Your *workflow* contains one or more *jobs* which can run in sequential order or in parallel.
-```
+> Your *workflow* contains one or more *jobs* which can run in sequential order or in parallel.
 
 ## How to setup a GitHub Action for a Python project
 
