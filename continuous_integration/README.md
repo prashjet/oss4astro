@@ -134,7 +134,14 @@ Let's look into the `workflow_02.yml` to see some more advanced, and useful, fea
 
 ### Multiple events
 
-This workflow is triggered by two events: pushes to the main branch or by the creation of pull requests into main
+So far, I have hacked this workflow to be inactive by setting the trigger even to be "the repository is deleted". Let's comment those lines out,
+
+```
+# on:
+#   delete
+```
+
+and un-comment the real event. This workflow is now triggered by two events: pushes to the main branch or by the creation of pull requests into main
 
 ```
 on:
@@ -168,7 +175,7 @@ Let's demonstrate this workflow by submitting a pull request to the main branch.
 Coverage is the percentage of code, counted by lines, which is touched by your tests. It's good to aim for high coverage, and to display this achievement proudly in your GitHub repository, using a *badge* such as,
 
 <p align="center">
-  <img width="100" src="./img/badge.png">
+  <img width="200" src="./img/badge.png">
 </p>
 
 A green coverage badge is quality assurance for anyone looking at your repository. Having said that... be aware that 100% coverage does *not* mean that code is 100% safe, since there may be contexts which are not covered by tests.
@@ -221,15 +228,24 @@ then open `htmlcov/index.html` in your browser to see a detailed coverage report
 
 ### [CodeCov](https://about.codecov.io/)
 
+Sign up for a CodeCov account using your GitHub profile.
 
+Then let's look at `workflow_03.yml`. This is a copy of `workflow_01.yml` with three differences:
+
+- we install `coverage` along with `pytest` when installing dependencies
+- run the tests using `coverage run -m pytest`
+- we add an extra step which uploads the coverage report to `CodeCov`
+
+We can then look at the coverage report by logging into `CodeCov`.
+
+Within `CodeCov` we can navigate to `pysequence --> Settings --> Bages & Graphs` to find the URL correspoding to our coverage badge.  It gives three options for the badge format: Markdown, HTML, or RST. We'll be adding the badge to our project `README.md` which is in Markdown, so copy and paste the Markdown URL to the top of your `README.md`.
 
 ### Alternatives to CodeCov
 
 CodeCov is a third-party tool which is free to use for open-source projects. Other third-party tools such as [Coveralls](https://coveralls.io/) provide similar help.
 
-There are some potential downsides to using third-party tools e.g. sometimes their servers go down, or they may change pricing plans etc. Given that `coverage` does most of the heavy lifting in computing and creating the coverage report, it should be simple to show coverage badge without using any third party tool. For the time being, however, existing solutions to do this look a little convoluted. For example, this [GitHub Action](https://github.com/tj-actions/coverage-badge-py) creates the badge file, commits and pushes this to your repository, which requires a secret GitHub access token. It's do-able, but (at least while there are free 
+There are potential downsides to using third-party tools e.g. sometimes their servers go down, or they may change pricing plans etc. Given that `coverage` does most of the heavy lifting in computing and creating the coverage report, it should be simple to show coverage badge without using any third party tool. For the time being, however, existing solutions to do this look a little convoluted. For example, this [GitHub Action](https://github.com/tj-actions/coverage-badge-py) creates the badge file, commits and pushes this to your repository, which requires a secret GitHub access token. It's do-able, but (at least while there are free 
 
 ## Other GitHub actions
 
-
-
+There is a whole zoo of GitHub actions available for all kinds of tasks, not just testing. For example, for uploading your project to PyPI, building and uploading documentation to ReadTheDocs, or even submitting articles to scientific journals! Read about ways to explore GitHub actions [here](https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions)
