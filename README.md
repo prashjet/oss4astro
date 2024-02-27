@@ -10,6 +10,7 @@ The aim of this course (inspired by the [Code/Astro](https://semaphorep.github.i
 | Jonathan Flunger          | [gammaforge](https://github.com/jonathanflunger/gammaforge)    |
 | Magdalena Forusova        | [H5CosmoKit](https://github.com/forusovam46/H5CosmoKit)    |
 | David Hernandez           | [standard classification](https://github.com/Starvexx/standard_classification)    |
+| Katharina Kain            | [DOGcosmoS](https://github.com/katharinaka/DOGcosmoS.git)    |
 | Tano Kender               | [Isopod](https://github.com/InkAtom/Isopod)    |
 | Dominik Loidolt           | [cmp_tool](https://github.com/blue-bit-shift/cmp_tool)   |
 | Lukas Orion & Jim Buisman | [NOrbit](https://github.com/Lukas-Orion/NOrbit)   |
